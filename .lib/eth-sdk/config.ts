@@ -1,18 +1,33 @@
+import dotenv from "dotenv";
+dotenv.config(); // Load environment variables from .env before accessing process.env
+
 import { defineConfig } from "@gnosis-guild/eth-sdk";
 import { ethSdkConfig } from "zodiac-roles-sdk";
 import contracts from "../../contracts";
 
-export default defineConfig({ ...ethSdkConfig, contracts, etherscanKeys: {
+const activeNetwork = (process.env.NETWORK || "optimism") as
+  | "ethereum"
+  | "optimism"
+  | "polygon"
+  | "arbitrum"
+  | "base";
 
-  optimism: "3E4XE4JTCIDBNT3ZJHCF5TC1HA1XH1VB91",
-},rpc: {
-  optimism: "https://opt-mainnet.g.alchemy.com/v2/EpR2pj6iHb-Bal7J6_7uC",
-} });
+// Utility to resolve env keys dynamically
+const getEnv = (key: string): string => {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`Missing environment variable: ${key}`);
+  }
+  return value;
+};
 
-
-
-// RPC_URL_ETHEREUM=https://eth-mainnet.g.alchemy.com/v2/EpR2pj6iHb-Bal7J6_7uC
-// RPC_URL_POLYGON=https://polygon-mainnet.g.alchemy.com/v2/EpR2pj6iHb-Bal7J6_7uC
-// RPC_URL_ARBITRUM=https://arb-mainnet.g.alchemy.com/v2/EpR2pj6iHb-Bal7J6_7uC
-// RPC_URL_OPTIMISM=https://opt-mainnet.g.alchemy.com/v2/EpR2pj6iHb-Bal7J6_7uC
-// RPC_URL_BASE=https://base-mainnet.g.alchemy.com/v2/EpR2pj6iHb-Bal7J6_7uC
+export default defineConfig({
+  ...ethSdkConfig,
+  contracts,
+  etherscanKeys: {
+    [activeNetwork]: getEnv(`ETHERSCAN_KEY_${activeNetwork.toUpperCase()}`),
+  },
+  rpc: {
+    [activeNetwork]: getEnv(`RPC_URL_${activeNetwork.toUpperCase()}`),
+  },
+});
