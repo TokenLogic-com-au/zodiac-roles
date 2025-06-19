@@ -1,18 +1,14 @@
 import dotenv from "dotenv";
-dotenv.config(); // Load environment variables from .env before accessing process.env
+dotenv.config();
 
 import { defineConfig } from "@gnosis-guild/eth-sdk";
 import { ethSdkConfig } from "zodiac-roles-sdk";
 import contracts from "../../contracts";
 
-const activeNetwork = (process.env.NETWORK || "optimism") as
-  | "ethereum"
-  | "optimism"
-  | "polygon"
-  | "arbitrum"
-  | "base";
+const allNetworks = Object.keys(contracts) as Array<
+  "mainnet" | "optimism" | "polygon" | "arbitrumOne" | "base" | string
+>;
 
-// Utility to resolve env keys dynamically
 const getEnv = (key: string): string => {
   const value = process.env[key];
   if (!value) {
@@ -21,13 +17,22 @@ const getEnv = (key: string): string => {
   return value;
 };
 
+const etherscanKey = getEnv("ETHERSCAN_API_KEY");
+
+const etherscanKeys = Object.fromEntries(
+  allNetworks.map((network) => [network, etherscanKey])
+);
+
+const rpc = Object.fromEntries(
+  allNetworks.map((network) => [
+    network,
+    getEnv(`RPC_URL_${network.toUpperCase()}`),
+  ])
+);
+
 export default defineConfig({
   ...ethSdkConfig,
   contracts,
-  etherscanKeys: {
-    [activeNetwork]: getEnv(`ETHERSCAN_KEY_${activeNetwork.toUpperCase()}`),
-  },
-  rpc: {
-    [activeNetwork]: getEnv(`RPC_URL_${activeNetwork.toUpperCase()}`),
-  },
+  etherscanKeys,
+  rpc,
 });
