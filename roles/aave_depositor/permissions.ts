@@ -1,12 +1,11 @@
+const networks = [
+  "optimism",
+  "arbitrumOne",
+  "polygon",
+  "base",
+  "mainnet"
+] as const;
 
-export default [
-  allow.optimism.poolExposureSteward.multicall(),
-
-  allow.arbitrumOne.poolExposureSteward.multicall(),
-
-  allow.polygon.poolExposureSteward.multicall(),
-
-  allow.base.poolExposureSteward.multicall(),
-
-  allow.mainnet.poolExposureSteward.multicall(),
-] satisfies Permissions;
+export default networks.map(
+  (network) => allow[network].poolExposureSteward.multicall()
+) satisfies Permissions;

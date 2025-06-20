@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-const raw = process.env.ROLES_MEMBERS;
+const raw = process.env.ROLE_MEMBERS;
 
 if (!raw) {
-  throw new Error("Missing ROLES_MEMBERS in .env");
+  throw new Error("Missing ROLE_MEMBERS in .env");
 }
 
 const members = raw
