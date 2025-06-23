@@ -7,8 +7,7 @@
   "scripts": {
     "setup": "eth-sdk -p ./.lib/eth-sdk",
     "test": "jest --runInBand --watch",
-    "apply": "rimraf build && tsc && node build/.lib/scripts/apply.js",
-    "apply:all": "rimraf build && tsc && node build/.lib/scripts/apply-all.js"
+    "apply": "rimraf build && tsc && node build/.lib/scripts/apply.js"
   },
   "dependencies": {
     "@gnosis-guild/eth-sdk": "^0.3.7",
