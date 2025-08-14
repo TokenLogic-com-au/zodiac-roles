@@ -79,6 +79,18 @@ export default {
    Windows: `Ctrl` + `Shift` + `P`
 3. Type `restart` and select the option `TypeScript: Restart TS server` from the suggestions list
 
+- Supports multiple networks: You can define contracts across multiple networks (e.g. mainnet, polygon, optimism), and yarn setup will fetch ABIs for all of them at once
+
+- Before running yarn setup, ensure your .env file contains the following variables:
+
+ETHERSCAN_API_KEY=your_etherscan_v2_key_here
+
+RPC_URL_MAINNET=https://...
+RPC_URL_OPTIMISM=https://...
+RPC_URL_POLYGON=https://...
+RPC_URL_ARBITRUMONE=https://...
+RPC_URL_BASE=https://...
+
 ### Edit Permissions
 
 In the _permissions.ts_ file for your role, type `allow.`.
